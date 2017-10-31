@@ -1,6 +1,7 @@
 package hash
 
 import (
+	"bytes"
 	"crypto"
 	"io"
 	"strings"
@@ -16,6 +17,7 @@ var (
 var algMap = map[crypto.Hash]string{
 	crypto.MD4:         "md4",         //require "golang.org/x/crypto/md4" package
 	crypto.MD5:         "md5",         //require "crypto/md5" package
+	crypto.MD5SHA1:     "md5sha1",     //no implementation
 	crypto.SHA1:        "sha1",        //require "crypto/sha1" package
 	crypto.SHA224:      "sha224",      //require "crypto/sha256" package
 	crypto.SHA256:      "sha256",      //require "crypto/sha256" package
@@ -32,7 +34,43 @@ var algMap = map[crypto.Hash]string{
 	crypto.BLAKE2b_256: "blake2b/256", //require "golang.org/x/crypto/blake2b" package
 	crypto.BLAKE2b_384: "blake2b/384", //require "golang.org/x/crypto/blake2b" package
 	crypto.BLAKE2b_512: "blake2b/512", //require "golang.org/x/crypto/blake2b" package
-	crypto.MD5SHA1:     "md5sha1",     //no implementation
+}
+var algOrder = []string{
+	algMap[crypto.MD4],
+	algMap[crypto.MD5],
+	algMap[crypto.MD5SHA1],
+	algMap[crypto.SHA1],
+	algMap[crypto.SHA224],
+	algMap[crypto.SHA256],
+	algMap[crypto.SHA384],
+	algMap[crypto.SHA512],
+	algMap[crypto.SHA512_224],
+	algMap[crypto.SHA512_256],
+	algMap[crypto.RIPEMD160],
+	algMap[crypto.SHA3_224],
+	algMap[crypto.SHA3_256],
+	algMap[crypto.SHA3_384],
+	algMap[crypto.SHA3_512],
+	algMap[crypto.BLAKE2s_256],
+	algMap[crypto.BLAKE2b_256],
+	algMap[crypto.BLAKE2b_384],
+	algMap[crypto.BLAKE2b_512],
+}
+
+//FuncList returns string of hash functions list
+func FuncList() string {
+	buf := new(bytes.Buffer)
+	sep := ""
+	for _, name := range algOrder {
+		alg, err := Algorithm(name)
+		if err == nil {
+			if alg.Available() {
+				io.WriteString(buf, sep+name)
+				sep = " "
+			}
+		}
+	}
+	return string(buf.Bytes())
 }
 
 //Algorithm returns crypto.Hash drom string
@@ -69,5 +107,4 @@ func ValueFromBytes(b []byte, alg crypto.Hash) ([]byte, error) {
 		return nil, errors.Wrap(ErrNoImplement, "error "+algoString(alg))
 	}
 	return alg.New().Sum(b), nil
-	//return fmt.Sprintf("%x", alg.New().Sum(b)), nil
 }

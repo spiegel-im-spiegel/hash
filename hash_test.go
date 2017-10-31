@@ -8,6 +8,14 @@ import (
 	"testing"
 )
 
+func TestFuncList(t *testing.T) {
+	res := "sha1"
+	str := FuncList()
+	if str != res {
+		t.Errorf("TestFuncList() = \"%v\", want \"%v\".", str, res)
+	}
+}
+
 func TestValueFromBytesFoo(t *testing.T) {
 	_, err := Algorithm("foo")
 	if err == nil {
