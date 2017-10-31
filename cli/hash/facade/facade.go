@@ -15,7 +15,7 @@ const (
 	//Name is applicatin name
 	Name = "hash"
 	//Version is version for applicatin
-	Version = "v0.1.2"
+	Version = "v0.1.3"
 )
 
 //ExitCode is OS exit code enumeration class
