@@ -2,7 +2,6 @@ package hash
 
 import (
 	"crypto"
-	"fmt"
 	"io"
 	"strings"
 
@@ -55,19 +54,20 @@ func algoString(alg crypto.Hash) string {
 }
 
 //Value returns hash value string from io.Reader
-func Value(r io.Reader, alg crypto.Hash) (string, error) {
+func Value(r io.Reader, alg crypto.Hash) ([]byte, error) {
 	if !alg.Available() {
-		return "", errors.Wrap(ErrNoImplement, "error "+algoString(alg))
+		return nil, errors.Wrap(ErrNoImplement, "error "+algoString(alg))
 	}
 	h := alg.New()
 	io.Copy(h, r)
-	return fmt.Sprintf("%x", h.Sum(nil)), nil
+	return h.Sum(nil), nil
 }
 
 //ValueFromBytes returns hash value string from []byte
-func ValueFromBytes(b []byte, alg crypto.Hash) (string, error) {
+func ValueFromBytes(b []byte, alg crypto.Hash) ([]byte, error) {
 	if !alg.Available() {
-		return "", errors.Wrap(ErrNoImplement, "error "+algoString(alg))
+		return nil, errors.Wrap(ErrNoImplement, "error "+algoString(alg))
 	}
-	return fmt.Sprintf("%x", alg.New().Sum(b)), nil
+	return alg.New().Sum(b), nil
+	//return fmt.Sprintf("%x", alg.New().Sum(b)), nil
 }

@@ -1,6 +1,7 @@
 package facade
 
 import (
+	"fmt"
 	"os"
 	"runtime"
 	"strings"
@@ -68,15 +69,16 @@ var rootCmd = &cobra.Command{
 		if len(args) > 0 {
 			file, err2 := os.Open(args[0]) //args[0] is maybe file path
 			if err2 != nil {
-				return err
+				return err2
 			}
 			defer file.Close()
 			reader = file
 		}
-		result, err := hash.Value(reader, alg)
+		v, err := hash.Value(reader, alg)
 		if err != nil {
 			return err
 		}
+		result := fmt.Sprintf("%x", v)
 		if compare != "" {
 			if strings.ToLower(compare) == result {
 				cui.OutputErrln("matched")

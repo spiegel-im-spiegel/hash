@@ -3,6 +3,7 @@ package hash
 import (
 	"bytes"
 	"crypto"
+	_ "crypto/sha1"
 	"fmt"
 	"testing"
 )
@@ -51,11 +52,13 @@ func TestValueSHA1(t *testing.T) {
 		t.Errorf("Algorithm() is \"%v\", want nil error.", err)
 		return
 	}
-	str, err := Value(bytes.NewBuffer([]byte("")), alg)
+	v, err := Value(bytes.NewBuffer([]byte("")), alg)
 	if err != nil {
 		t.Errorf("ValueFromBytes() is \"%v\", want nil error.", err)
 		return
 	}
+	str := fmt.Sprintf("%x", v)
+
 	if str != hv {
 		t.Errorf("ValueFromBytes() = \"%v\", want \"%v\".", str, hv)
 	}
@@ -68,32 +71,33 @@ func TestValueFromBytesSHA1(t *testing.T) {
 		t.Errorf("Algorithm() is \"%v\", want nil error.", err)
 		return
 	}
-	str, err := ValueFromBytes([]byte(""), alg)
+	v, err := ValueFromBytes([]byte(""), alg)
 	if err != nil {
 		t.Errorf("Value() is \"%v\", want nil error.", err)
 		return
 	}
+	str := fmt.Sprintf("%x", v)
 	if str != hv {
 		t.Errorf("Value() = \"%v\", want \"%v\".", str, hv)
 	}
 }
 
 func ExampleValue() {
-	str, err := Value(bytes.NewBuffer([]byte("")), crypto.SHA1)
+	v, err := Value(bytes.NewBuffer([]byte("")), crypto.SHA1)
 	if err != nil {
 		return
 	}
-	fmt.Println(str)
+	fmt.Printf("%x\n", v)
 	// Output:
 	// da39a3ee5e6b4b0d3255bfef95601890afd80709
 }
 
 func ExampleValueFromBytes() {
-	str, err := ValueFromBytes([]byte(""), crypto.SHA1)
+	v, err := ValueFromBytes([]byte(""), crypto.SHA1)
 	if err != nil {
 		return
 	}
-	fmt.Println(str)
+	fmt.Printf("%x\n", v)
 	// Output:
 	// da39a3ee5e6b4b0d3255bfef95601890afd80709
 }

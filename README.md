@@ -17,21 +17,21 @@ $ dep ensure -add github.com/spiegel-im-spiegel/hash
 ## Usage
 
 ```go
-str, err := hash.Value(bytes.NewBuffer([]byte("")), crypto.SHA1)
+v, err := hash.Value(bytes.NewBuffer([]byte("")), crypto.SHA1)
 if err != nil {
     return
 }
-fmt.Println(str)
+fmt.Printf("%x\n", v)
 // Output:
 // da39a3ee5e6b4b0d3255bfef95601890afd80709
 ```
 
 ```go
-str, err := hash.ValueFromBytes([]byte(""), crypto.SHA1)
+v, err := hash.ValueFromBytes([]byte(""), crypto.SHA1)
 if err != nil {
     return
 }
-fmt.Println(str)
+fmt.Printf("%x\n", v)
 // Output:
 // da39a3ee5e6b4b0d3255bfef95601890afd80709
 ```
