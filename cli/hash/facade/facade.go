@@ -118,6 +118,6 @@ func Execute(ui *gocli.UI) (exit ExitCode) {
 }
 
 func init() {
-	rootCmd.Flags().StringP("algo", "a", "sha256", "hash algorithm (default sha256)")
+	rootCmd.Flags().StringP("algo", "a", "sha256", "hash algorithm")
 	rootCmd.Flags().StringP("compare", "c", "", "compare hash value")
 }

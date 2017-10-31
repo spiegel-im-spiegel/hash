@@ -17,7 +17,7 @@ $ dep ensure -add github.com/spiegel-im-spiegel/hash
 ## Usage
 
 ```go
-str, err := Value(bytes.NewBuffer([]byte("")), crypto.SHA1)
+str, err := hash.Value(bytes.NewBuffer([]byte("")), crypto.SHA1)
 if err != nil {
     return
 }
@@ -27,7 +27,7 @@ fmt.Println(str)
 ```
 
 ```go
-str, err := ValueFromBytes([]byte(""), crypto.SHA1)
+str, err := hash.ValueFromBytes([]byte(""), crypto.SHA1)
 if err != nil {
     return
 }
@@ -36,7 +36,7 @@ fmt.Println(str)
 // da39a3ee5e6b4b0d3255bfef95601890afd80709
 ```
 
-Required hash function packages:
+### Required hash function packages
 
 | hash algorithm | import package |
 |:---------------|:---------------|
@@ -85,7 +85,7 @@ Usage:
   hash [flags] [binary file]
 
 Flags:
-  -a, --algo string      hash algorithm (default sha256) (default "sha256")
+  -a, --algo string      hash algorithm (default "sha256")
   -c, --compare string   compare hash value
   -h, --help             help for hash
 ```
@@ -106,7 +106,9 @@ $  hash -a sha1 empty.txt -c da39a3ee5e6b4b0d3255bfef95601890afd80709
 matched
 ```
 
-hash algorithms: `md4`, `md5`, `sha1`, `sha224`, `sha256`, `sha384`, `sha512`, `sha512/224`, `sha512/256`, `ripemd160`, `sha3-224`, `sha3-256`, `sha3-384`, `sha3-512`, `blake2s`, `blake2b/256`, `blake2b/384`, `blake2b/512`
+### Hash Algorithms
+
+`md4`, `md5`, `sha1`, `sha224`, `sha256`, `sha384`, `sha512`, `sha512/224`, `sha512/256`, `ripemd160`, `sha3-224`, `sha3-256`, `sha3-384`, `sha3-512`, `blake2s`, `blake2b/256`, `blake2b/384`, `blake2b/512`
 
 ### Dependencies (CLI only)
 
