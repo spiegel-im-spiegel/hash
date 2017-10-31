@@ -47,7 +47,7 @@ func Algorithm(s string) (crypto.Hash, error) {
 	return crypto.Hash(0), errors.Wrap(ErrNoImplement, "error "+s)
 }
 
-func algoAtring(alg crypto.Hash) string {
+func algoString(alg crypto.Hash) string {
 	if str, ok := algMap[alg]; ok {
 		return str
 	}
@@ -57,7 +57,7 @@ func algoAtring(alg crypto.Hash) string {
 //Value returns hash value string from io.Reader
 func Value(r io.Reader, alg crypto.Hash) (string, error) {
 	if !alg.Available() {
-		return "", errors.Wrap(ErrNoImplement, "error "+algoAtring(alg))
+		return "", errors.Wrap(ErrNoImplement, "error "+algoString(alg))
 	}
 	h := alg.New()
 	io.Copy(h, r)
@@ -67,7 +67,7 @@ func Value(r io.Reader, alg crypto.Hash) (string, error) {
 //ValueFromBytes returns hash value string from []byte
 func ValueFromBytes(b []byte, alg crypto.Hash) (string, error) {
 	if !alg.Available() {
-		return "", errors.Wrap(ErrNoImplement, "error "+algoAtring(alg))
+		return "", errors.Wrap(ErrNoImplement, "error "+algoString(alg))
 	}
 	return fmt.Sprintf("%x", alg.New().Sum(b)), nil
 }
