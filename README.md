@@ -96,13 +96,13 @@ da39a3ee5e6b4b0d3255bfef95601890afd80709
 ```
 
 ```
-$  hash -a sha1 empty.txt
+$ hash -a sha1 empty.txt
 da39a3ee5e6b4b0d3255bfef95601890afd80709
 ```
 
 
 ```
-$  hash -a sha1 empty.txt -c da39a3ee5e6b4b0d3255bfef95601890afd80709
+$ hash -a sha1 empty.txt -c da39a3ee5e6b4b0d3255bfef95601890afd80709
 matched
 ```
 

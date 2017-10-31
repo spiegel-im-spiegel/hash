@@ -15,7 +15,7 @@ const (
 	//Name is applicatin name
 	Name = "hash"
 	//Version is version for applicatin
-	Version = "v0.1.0"
+	Version = "v0.1.2"
 )
 
 //ExitCode is OS exit code enumeration class
@@ -46,7 +46,8 @@ func (c ExitCode) String() string {
 }
 
 var (
-	cui = gocli.NewUI()
+	cui      = gocli.NewUI()
+	exitCode = Normal
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -74,19 +75,24 @@ var rootCmd = &cobra.Command{
 			defer file.Close()
 			reader = file
 		}
+
 		v, err := hash.Value(reader, alg)
 		if err != nil {
 			return err
 		}
 		result := fmt.Sprintf("%x", v)
+
 		if compare != "" {
 			if strings.ToLower(compare) == result {
 				cui.OutputErrln("matched")
+				exitCode = Normal
 			} else {
 				cui.OutputErrln("unmatched")
+				exitCode = Abnormal
 			}
 		} else {
 			cui.Outputln(result)
+			exitCode = Normal
 		}
 		return nil
 	},
@@ -111,10 +117,11 @@ func Execute(ui *gocli.UI) (exit ExitCode) {
 	}()
 
 	//execution
-	exit = Normal
 	cui = ui
 	if err := rootCmd.Execute(); err != nil {
 		exit = Abnormal
+	} else {
+		exit = exitCode
 	}
 	return
 }
