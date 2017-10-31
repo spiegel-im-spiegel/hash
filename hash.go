@@ -35,42 +35,42 @@ var algMap = map[crypto.Hash]string{
 	crypto.BLAKE2b_384: "blake2b/384", //require "golang.org/x/crypto/blake2b" package
 	crypto.BLAKE2b_512: "blake2b/512", //require "golang.org/x/crypto/blake2b" package
 }
-var algOrder = []string{
-	algMap[crypto.MD4],
-	algMap[crypto.MD5],
-	algMap[crypto.MD5SHA1],
-	algMap[crypto.SHA1],
-	algMap[crypto.SHA224],
-	algMap[crypto.SHA256],
-	algMap[crypto.SHA384],
-	algMap[crypto.SHA512],
-	algMap[crypto.SHA512_224],
-	algMap[crypto.SHA512_256],
-	algMap[crypto.RIPEMD160],
-	algMap[crypto.SHA3_224],
-	algMap[crypto.SHA3_256],
-	algMap[crypto.SHA3_384],
-	algMap[crypto.SHA3_512],
-	algMap[crypto.BLAKE2s_256],
-	algMap[crypto.BLAKE2b_256],
-	algMap[crypto.BLAKE2b_384],
-	algMap[crypto.BLAKE2b_512],
+var algOrder = []crypto.Hash{
+	crypto.MD4,
+	crypto.MD5,
+	crypto.MD5SHA1,
+	crypto.SHA1,
+	crypto.SHA224,
+	crypto.SHA256,
+	crypto.SHA384,
+	crypto.SHA512,
+	crypto.SHA512_224,
+	crypto.SHA512_256,
+	crypto.RIPEMD160,
+	crypto.SHA3_224,
+	crypto.SHA3_256,
+	crypto.SHA3_384,
+	crypto.SHA3_512,
+	crypto.BLAKE2s_256,
+	crypto.BLAKE2b_256,
+	crypto.BLAKE2b_384,
+	crypto.BLAKE2b_512,
 }
 
-//FuncList returns string of hash functions list
-func FuncList() string {
+//FuncList returns string (io.Reader) of hash functions list
+func FuncList() io.Reader {
 	buf := new(bytes.Buffer)
 	sep := ""
-	for _, name := range algOrder {
-		alg, err := Algorithm(name)
-		if err == nil {
-			if alg.Available() {
-				io.WriteString(buf, sep+name)
+	for _, alg := range algOrder {
+		if alg.Available() {
+			if name, ok := algMap[alg]; ok {
+				io.WriteString(buf, sep)
+				io.WriteString(buf, name)
 				sep = " "
 			}
 		}
 	}
-	return string(buf.Bytes())
+	return buf
 }
 
 //Algorithm returns crypto.Hash drom string

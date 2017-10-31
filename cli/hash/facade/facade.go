@@ -15,7 +15,7 @@ const (
 	//Name is applicatin name
 	Name = "hash"
 	//Version is version for applicatin
-	Version = "v0.1.4"
+	Version = "v0.1.5"
 )
 
 //ExitCode is OS exit code enumeration class
@@ -125,7 +125,9 @@ func Execute(ui *gocli.UI) (exit ExitCode) {
 	if err := rootCmd.Execute(); err != nil {
 		exit = Abnormal
 	} else if funcFlag {
-		ui.Outputln("Available hash algorithms:", hash.FuncList())
+		ui.Output("Available hash algorithms: ")
+		ui.WriteFrom(hash.FuncList())
+		ui.Outputln()
 	} else {
 		exit = exitCode
 	}
