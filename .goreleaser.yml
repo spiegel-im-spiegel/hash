@@ -35,6 +35,7 @@ archive:
     darwin: macOS
     linux: Linux
     windows: Windows
+    freebsd: FreeBSD
   files:
   - LICENSE*
   - README*
