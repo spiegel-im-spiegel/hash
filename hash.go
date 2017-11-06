@@ -57,8 +57,8 @@ var algOrder = []crypto.Hash{
 	crypto.BLAKE2b_512,
 }
 
-//FuncList returns string (io.Reader) of hash functions list
-func FuncList() io.Reader {
+//FuncList returns string of hash functions list
+func FuncList() string {
 	buf := new(bytes.Buffer)
 	sep := ""
 	for _, alg := range algOrder {
@@ -70,7 +70,7 @@ func FuncList() io.Reader {
 			}
 		}
 	}
-	return buf
+	return string(buf.Bytes())
 }
 
 //Algorithm returns crypto.Hash drom string

@@ -15,7 +15,7 @@ const (
 	//Name is applicatin name
 	Name = "hash"
 	//Version is version for applicatin
-	Version = "v0.1.5"
+	Version string
 )
 
 //ExitCode is OS exit code enumeration class
@@ -55,7 +55,12 @@ var (
 var rootCmd = &cobra.Command{
 	Use: Name + " [flags] [binary file]",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if funcFlag {
+		listFlag, err := cmd.Flags().GetBool("list")
+		if err != nil {
+			return err
+		}
+		if listFlag {
+			cui.Outputln(hash.FuncList())
 			return nil
 		}
 		name, err := cmd.Flags().GetString("algo")
@@ -124,10 +129,6 @@ func Execute(ui *gocli.UI) (exit ExitCode) {
 	cui = ui
 	if err := rootCmd.Execute(); err != nil {
 		exit = Abnormal
-	} else if funcFlag {
-		ui.Output("Available hash algorithms: ")
-		ui.WriteFrom(hash.FuncList())
-		ui.Outputln()
 	} else {
 		exit = exitCode
 	}
@@ -137,5 +138,5 @@ func Execute(ui *gocli.UI) (exit ExitCode) {
 func init() {
 	rootCmd.Flags().StringP("algo", "a", "sha256", "hash algorithm")
 	rootCmd.Flags().StringP("compare", "c", "", "compare hash value")
-	rootCmd.Flags().BoolVarP(&funcFlag, "list", "l", false, "listing hash functions")
+	rootCmd.Flags().BoolP("list", "l", false, "listing hash functions")
 }
