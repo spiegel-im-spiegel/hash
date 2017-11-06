@@ -28,14 +28,14 @@
 [[projects]]
   name = "github.com/spiegel-im-spiegel/gocli"
   packages = ["."]
-  revision = "4fd5a75acbf2699359935398f109f7d740bcf6d5"
-  version = "v0.4.2"
+  revision = "663c5d5d717eb8076219a392d2dd2b15e35a17bd"
+  version = "v0.4.3"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["blake2b","blake2s","md4","ripemd160","sha3"]
-  revision = "2509b142fb2b797aa7587dad548f113b2c0f20ce"
+  revision = "ca1fcd4ab4c10bc58852a894bcf195fab2229efe"
 
 [solve-meta]
   analyzer-name = "dep"

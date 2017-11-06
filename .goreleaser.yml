@@ -1,0 +1,55 @@
+project_name: hash
+release:
+  github:
+    owner: spiegel-im-spiegel
+    name: hash
+
+builds:
+- goos:
+  - linux
+  - darwin
+  - windows
+  - freebsd
+  goarch:
+  - amd64
+  - "386"
+  - arm
+  - arm64
+  goarm:
+  - "6"
+  main: ./cli/hash/
+  ldflags: -s -w -X github.com/spiegel-im-spiegel/hash/cli/hash/facade.Version={{ .Version }} -X github.com/spiegel-im-spiegel/hash/cli/hash/facade.OS={{ .Os }} -X github.com/spiegel-im-spiegel/hash/cli/hash/facade.Arch={{ .Arch }}
+  binary: hash
+
+archive:
+  format: tar.gz
+  format_overrides:
+    - goos: windows
+      format: zip
+  name_template: '{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  replacements:
+    amd64: 64bit
+    386: 32bit
+    arm: ARM
+    arm64: ARM64
+    darwin: macOS
+    linux: Linux
+    windows: Windows
+  files:
+  - LICENSE*
+  - README*
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - docs
+      - typo
+      - Merge pull request
+      - Merge branch
+
+snapshot:
+  name_template: SNAPSHOT-{{ .Commit }}
+
+checksum:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_checksums.txt'
