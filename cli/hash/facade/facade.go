@@ -17,10 +17,8 @@ var (
 	Name = "hash"
 	//Version is version number of application
 	Version string
-	//OS is OS name
-	OS string
-	//Arch is architecture name
-	Arch string
+	//Commit is commit hash value
+	Commit string
 )
 
 var (
@@ -42,8 +40,8 @@ var rootCmd = &cobra.Command{
 			if len(Version) > 0 {
 				cui.OutputErr(fmt.Sprintf(" v%s", Version))
 			}
-			if len(OS) > 0 && len(Arch) > 0 {
-				cui.OutputErr(fmt.Sprintf(" (%s/%s)", OS, Arch))
+			if len(Commit) > 0 {
+				cui.OutputErr(fmt.Sprintf(" (commit: %s)", Commit))
 			}
 			cui.OutputErrln()
 			return nil
