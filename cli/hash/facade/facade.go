@@ -1,6 +1,7 @@
 package facade
 
 import (
+	"crypto"
 	"fmt"
 	"os"
 	"runtime"
@@ -11,51 +12,48 @@ import (
 	"github.com/spiegel-im-spiegel/hash"
 )
 
-const (
+var (
 	//Name is applicatin name
 	Name = "hash"
-	//Version is version for applicatin
-	Version = "v0.1.5"
+	//Version is version number of application
+	Version string
+	//OS is OS name
+	OS string
+	//Arch is architecture name
+	Arch string
 )
-
-//ExitCode is OS exit code enumeration class
-type ExitCode int
-
-const (
-	//Normal is OS exit code "normal"
-	Normal ExitCode = iota
-	//Abnormal is OS exit code "abnormal"
-	Abnormal
-)
-
-//Int convert integer value
-func (c ExitCode) Int() int {
-	return int(c)
-}
-
-//Stringer method
-func (c ExitCode) String() string {
-	switch c {
-	case Normal:
-		return "normal end"
-	case Abnormal:
-		return "abnormal end"
-	default:
-		return "unknown"
-	}
-}
 
 var (
-	cui      = gocli.NewUI()
-	exitCode = Normal
-	funcFlag = false
+	cui        = gocli.NewUI()
+	exitCode   = ExitNormal
+	defaultAlg = hash.AlgoString(crypto.SHA256)
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use: Name + " [flags] [binary file]",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if funcFlag {
+		versionFlag, err := cmd.Flags().GetBool("version")
+		if err != nil {
+			return err
+		}
+		if versionFlag {
+			cui.OutputErr(Name)
+			if len(Version) > 0 {
+				cui.OutputErr(fmt.Sprintf(" v%s", Version))
+			}
+			if len(OS) > 0 && len(Arch) > 0 {
+				cui.OutputErr(fmt.Sprintf(" (%s/%s)", OS, Arch))
+			}
+			cui.OutputErrln()
+			return nil
+		}
+		listFlag, err := cmd.Flags().GetBool("list")
+		if err != nil {
+			return err
+		}
+		if listFlag {
+			cui.Outputln(hash.FuncList())
 			return nil
 		}
 		name, err := cmd.Flags().GetString("algo")
@@ -89,14 +87,14 @@ var rootCmd = &cobra.Command{
 		if compare != "" {
 			if strings.ToLower(compare) == result {
 				cui.OutputErrln("matched")
-				exitCode = Normal
+				exitCode = ExitNormal
 			} else {
 				cui.OutputErrln("unmatched")
-				exitCode = Abnormal
+				exitCode = ExitAbnormal
 			}
 		} else {
 			cui.Outputln(result)
-			exitCode = Normal
+			exitCode = ExitNormal
 		}
 		return nil
 	},
@@ -104,7 +102,7 @@ var rootCmd = &cobra.Command{
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute(ui *gocli.UI) (exit ExitCode) {
+func Execute(ui *gocli.UI, args []string) (exit ExitCode) {
 	defer func() {
 		//panic hundling
 		if r := recover(); r != nil {
@@ -116,18 +114,16 @@ func Execute(ui *gocli.UI) (exit ExitCode) {
 				}
 				cui.OutputErrln(" ->", depth, ":", runtime.FuncForPC(pc).Name(), ": line", line)
 			}
-			exit = Abnormal
+			exit = ExitAbnormal
 		}
 	}()
 
 	//execution
 	cui = ui
+	rootCmd.SetArgs(args)
+	rootCmd.SetOutput(ui.ErrorWriter())
 	if err := rootCmd.Execute(); err != nil {
-		exit = Abnormal
-	} else if funcFlag {
-		ui.Output("Available hash algorithms: ")
-		ui.WriteFrom(hash.FuncList())
-		ui.Outputln()
+		exit = ExitAbnormal
 	} else {
 		exit = exitCode
 	}
@@ -135,7 +131,8 @@ func Execute(ui *gocli.UI) (exit ExitCode) {
 }
 
 func init() {
-	rootCmd.Flags().StringP("algo", "a", "sha256", "hash algorithm")
+	rootCmd.Flags().StringP("algo", "a", defaultAlg, "hash algorithm")
 	rootCmd.Flags().StringP("compare", "c", "", "compare hash value")
-	rootCmd.Flags().BoolVarP(&funcFlag, "list", "l", false, "listing hash functions")
+	rootCmd.Flags().BoolP("list", "l", false, "listing hash functions")
+	rootCmd.Flags().BoolP("version", "v", false, "version of "+Name)
 }

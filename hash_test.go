@@ -4,16 +4,14 @@ import (
 	"bytes"
 	"crypto"
 	_ "crypto/sha1"
+	_ "crypto/sha512"
 	"fmt"
-	"io"
 	"testing"
 )
 
 func TestFuncList(t *testing.T) {
-	res := "sha1"
-	buf := new(bytes.Buffer)
-	io.Copy(buf, FuncList())
-	str := string(buf.Bytes())
+	res := "sha1 sha384 sha512 sha512/224 sha512/256"
+	str := FuncList()
 	if str != res {
 		t.Errorf("TestFuncList() = \"%v\", want \"%v\".", str, res)
 	}

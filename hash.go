@@ -57,8 +57,8 @@ var algOrder = []crypto.Hash{
 	crypto.BLAKE2b_512,
 }
 
-//FuncList returns string (io.Reader) of hash functions list
-func FuncList() io.Reader {
+//FuncList returns string of hash functions list
+func FuncList() string {
 	buf := new(bytes.Buffer)
 	sep := ""
 	for _, alg := range algOrder {
@@ -70,7 +70,7 @@ func FuncList() io.Reader {
 			}
 		}
 	}
-	return buf
+	return string(buf.Bytes())
 }
 
 //Algorithm returns crypto.Hash drom string
@@ -84,7 +84,8 @@ func Algorithm(s string) (crypto.Hash, error) {
 	return crypto.Hash(0), errors.Wrap(ErrNoImplement, "error "+s)
 }
 
-func algoString(alg crypto.Hash) string {
+//AlgoString returns string of hash algorithm
+func AlgoString(alg crypto.Hash) string {
 	if str, ok := algMap[alg]; ok {
 		return str
 	}
@@ -94,7 +95,7 @@ func algoString(alg crypto.Hash) string {
 //Value returns hash value string from io.Reader
 func Value(r io.Reader, alg crypto.Hash) ([]byte, error) {
 	if !alg.Available() {
-		return nil, errors.Wrap(ErrNoImplement, "error "+algoString(alg))
+		return nil, errors.Wrap(ErrNoImplement, "error "+AlgoString(alg))
 	}
 	h := alg.New()
 	io.Copy(h, r)
@@ -104,7 +105,7 @@ func Value(r io.Reader, alg crypto.Hash) ([]byte, error) {
 //ValueFromBytes returns hash value string from []byte
 func ValueFromBytes(b []byte, alg crypto.Hash) ([]byte, error) {
 	if !alg.Available() {
-		return nil, errors.Wrap(ErrNoImplement, "error "+algoString(alg))
+		return nil, errors.Wrap(ErrNoImplement, "error "+AlgoString(alg))
 	}
 	return alg.New().Sum(b), nil
 }
