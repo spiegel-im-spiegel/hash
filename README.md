@@ -1,5 +1,6 @@
 # hash -- Calculating Hash Value
 
+[![Build Status](https://travis-ci.org/spiegel-im-spiegel/hash.svg?branch=master)](https://travis-ci.org/spiegel-im-spiegel/hash)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/spiegel-im-spiegel/hash/master/LICENSE)
 
 ## Install
