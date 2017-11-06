@@ -1,4 +1,4 @@
-# hash -- Command Line Interface
+# hash -- Calculating Hash Value
 
 ## Install
 

@@ -38,7 +38,7 @@ archive:
     freebsd: FreeBSD
   files:
   - LICENSE*
-  - README*
+  - ./docs/*
 
 changelog:
   sort: asc

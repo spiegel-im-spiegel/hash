@@ -80,7 +80,7 @@ import (
 
 ## Command Line Interface
 
-See [cli/hash/README.md](cli/hash/README.md)
+See [docs/README.md](docs/README.md).
 
 [hash]: https://github.com/spiegel-im-spiegel/hash "spiegel-im-spiegel/hash: Calculating Hash Value"
 [dep]: https://github.com/golang/dep "golang/dep: Go dependency management tool"
