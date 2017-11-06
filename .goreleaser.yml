@@ -18,7 +18,7 @@ builds:
   goarm:
   - "6"
   main: ./cli/hash/
-  ldflags: -s -w -X github.com/spiegel-im-spiegel/hash/cli/hash/facade.Version={{ .Version }} -X github.com/spiegel-im-spiegel/hash/cli/hash/facade.OS={{ .Os }} -X github.com/spiegel-im-spiegel/hash/cli/hash/facade.Arch={{ .Arch }}
+  ldflags: -s -w -X github.com/spiegel-im-spiegel/hash/cli/hash/facade.Version={{ .Version }} -X github.com/spiegel-im-spiegel/hash/cli/hash/facade.Commit={{ .Commit }}
   binary: hash
 
 archive:
@@ -35,6 +35,7 @@ archive:
     darwin: macOS
     linux: Linux
     windows: Windows
+    freebsd: FreeBSD
   files:
   - LICENSE*
   - README*
